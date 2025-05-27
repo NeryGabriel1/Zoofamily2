@@ -1,0 +1,152 @@
+/* NAVBAR PRINCIPAL */
+.navbar {
+  background-color: #6C3483;
+  /* O si prefieres efecto glass: 
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  */
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1000;
+}
+
+/* CONTENEDOR */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* LOGO */
+.navbar-logo {
+  color: white;
+  font-weight: bold;
+  font-size: 1.8rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* LINKS */
+.navbar-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ELEMENTOS */
+.navbar-links li {
+  display: flex;
+  align-items: center;
+}
+
+/* BOTONES */
+.menu-button,
+.logout-button {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  border-radius: 25px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.menu-button:hover,
+.logout-button:hover,
+.menu-button.active {
+  background-color: #BB8FCE;
+  color: #4A235A;
+  transform: translateY(-2px);
+}
+
+/* BOTÓN SALIR DESTACADO */
+.logout-button {
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(238, 90, 36, 0.3);
+}
+
+.logout-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(238, 90, 36, 0.4);
+}
+
+/* USUARIO */
+.navbar-user {
+  font-size: 0.95rem;
+  white-space: nowrap;
+  color: white;
+  margin-left: 10px;
+}
+
+/* HAMBURGUESA */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.bar {
+  height: 3px;
+  width: 25px;
+  background-color: white;
+  margin: 4px 0;
+  border-radius: 3px;
+}
+
+/* RESPONSIVE*/
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .navbar-container {
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    background-color: #6C3483;
+    transition: max-height 0.3s ease-in-out;
+    margin-top: 10px;
+    border-radius: 10px;
+  }
+
+  .navbar-links.active {
+    max-height: 300px;
+  }
+
+  .navbar-links li {
+    width: 100%;
+    text-align: left;
+  }
+
+  .menu-button,
+  .logout-button {
+    width: 100%;
+    text-align: left;
+    padding: 12px;
+  }
+
+  .navbar-user {
+    padding: 10px 12px;
+    width: 100%;
+    text-align: left;
+  }
+}

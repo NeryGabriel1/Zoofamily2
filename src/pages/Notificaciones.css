@@ -1,0 +1,164 @@
+/* Reset y base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.notificaciones-page-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding-bottom: 3rem;
+  color: #333;
+}
+
+/* Contenedor principal */
+.notificaciones-contents {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+/* Título */
+.notificaciones-titles {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  background: linear-gradient(135deg, #ffffff, #dcd6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 20px rgba(255, 255, 255, 0.3);
+  letter-spacing: 1px;
+}
+
+/* Lista */
+.notificaciones-list {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Tarjeta individual */
+.notificacion-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.notificacion-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.notificacion-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Contenido */
+.notificacion-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #333;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.notificacion-icon {
+  font-size: 1.4rem;
+}
+
+/* Enlace */
+.notificacion-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 0.3rem;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.notificacion-link:hover {
+  border-bottom-color: #667eea;
+  color: #764ba2;
+}
+
+/* Fecha */
+.notificacion-footer {
+  margin-top: 0.8rem;
+}
+
+.notificacion-date {
+  font-size: 0.9rem;
+  color: #888;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.notificacion-date::before {
+  content: "📅";
+  font-size: 0.9rem;
+}
+
+/* Si no hay notificaciones */
+.no-notificaciones {
+  text-align: center;
+  color: #555;
+  font-size: 1.2rem;
+  padding: 2rem;
+}
+
+/* Animación */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .notificaciones-content {
+    padding: 0 1rem;
+  }
+
+  .notificaciones-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .notificaciones-list {
+    padding: 1.5rem;
+  }
+
+  .notificacion-card {
+    padding: 1rem;
+  }
+}
