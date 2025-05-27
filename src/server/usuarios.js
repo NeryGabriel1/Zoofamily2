@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
   port: 587,
   auth: {
     user: 'apikey',
-    pass: '' // reemplaza con tu clave válida
+    pass: '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' // reemplaza con tu clave válida
   }
 });
 
