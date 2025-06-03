@@ -9,11 +9,13 @@ function Notificaciones() {
   const [notifications, setNotifications] = useState([]);
   const { currentUser } = useAuth();
 
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
   useEffect(() => {
     const fetchNotifications = async () => {
       if (!currentUser) return;
       try {
-        const res = await axios.get(`http://localhost:3001/api/notificaciones/${currentUser.uid}`);
+        const res = await axios.get(`${API_URL}/api/notificaciones/${currentUser.uid}`);
         setNotifications(res.data);
       } catch (err) {
         console.error('Error al cargar notificaciones:', err);

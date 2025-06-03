@@ -9,10 +9,12 @@ function VerEvento() {
   const [evento, setEvento] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchEvento = async () => {
       try {
-        const res = await axios.get(`http://localhost:3001/api/eventos/detalle/${id}`);
+        const res = await axios.get(`${API_URL}/api/eventos/detalle/${id}`);
         setEvento(res.data);
       } catch (err) {
         console.error('Error al cargar el evento:', err);

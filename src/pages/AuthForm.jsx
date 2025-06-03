@@ -14,15 +14,12 @@ const AuthForm = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [step, setStep] = useState('form'); // form | verify
+  const [step, setStep] = useState('form');
 
   const navigate = useNavigate();
   const { login, register, loginWithGoogle } = useAuth();
 
-  const API_URL =
-    import.meta.env.MODE === 'development'
-      ? 'http://localhost:3001/api/usuarios'
-      : '/api/usuarios';
+  const API_URL = `${import.meta.env.VITE_API_URL}/api/usuarios`;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

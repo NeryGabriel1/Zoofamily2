@@ -24,8 +24,8 @@ export function AuthProvider({ children }) {
   const [userData, setUserData] = useState(null);       // Usuario de MySQL
   const [loading, setLoading] = useState(true);
 
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
-
+  //const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+  const API_URL = `${import.meta.env.VITE_API_URL}/api/usuarios`;
   // Login normal
   const login = async (email, password) => {
     if (!email || !password) {
@@ -69,7 +69,8 @@ export function AuthProvider({ children }) {
   // Obtener datos del usuario desde MySQL por UID de Firebase
   const fetchUserData = async (uid) => {
     try {
-      const response = await axios.get(`${API_URL}/api/usuarios/uid/${uid}`);
+      //const response = await axios.get(`${API_URL}/api/usuarios/uid/${uid}`);
+      const response = await axios.get(`${API_URL}/uid/${uid}`);
       setUserData(response.data); // ← contiene el id de MySQL
     } catch (error) {
       console.error("Error al obtener datos del usuario desde MySQL:", error);

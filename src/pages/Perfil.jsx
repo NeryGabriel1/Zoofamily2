@@ -20,6 +20,8 @@ const Perfil = () => {
     fechaRegistro: ""
   });
 
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
   useEffect(() => {
     if (userData) {
       setNombre(userData.nombre || "");
@@ -31,7 +33,7 @@ const Perfil = () => {
 
   const obtenerEstadisticas = async (userId) => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/mascotas/estadisticas/${userId}`);
+      const res = await axios.get(`${API_URL}/api/mascotas/estadisticas/${userId}`);
       setEstadisticas(res.data);
     } catch (error) {
       console.error("Error al obtener estadísticas:", error);
@@ -77,7 +79,7 @@ const Perfil = () => {
       formData.append("username", username);
       if (imagenFile) formData.append("foto", imagenFile);
 
-      const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/usuarios/actualizar`, formData);
+      const res = await axios.put(`${API_URL}/api/usuarios/actualizar`, formData);
 
       if (res.data.success) {
         setUserData(prev => ({

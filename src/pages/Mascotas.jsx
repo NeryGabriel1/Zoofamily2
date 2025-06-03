@@ -15,6 +15,7 @@ const Mascotas = () => {
     foto: null,
   });
   const [editandoId, setEditandoId] = useState(null);
+
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
   useEffect(() => {
@@ -136,7 +137,11 @@ const Mascotas = () => {
             {mascotas.map((mascota) => (
               <div className="pet-card" key={mascota.id}>
                 <img
-                  src={mascota.foto_url ? `${API_URL}${mascota.foto_url}` : '/placeholder.jpg'}
+                  src={
+                    mascota.foto_url?.startsWith('http')
+                      ? mascota.foto_url
+                      : `${API_URL}${mascota.foto_url}`
+                  }
                   alt={mascota.nombre}
                   className="pet-imagen"
                 />

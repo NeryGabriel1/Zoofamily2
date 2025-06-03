@@ -18,9 +18,11 @@ const Vacuna = () => {
   const [modalVacuna, setModalVacuna] = useState(false);
   const [nuevaVacuna, setNuevaVacuna] = useState({ nombre: "", fecha: "" });
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     if (userData?.id) {
-      axios.get(`http://localhost:3001/api/mascotas/${userData.id}`)
+      axios.get(`${API_URL}/api/mascotas/${userData.id}`)
         .then((res) => setMascotas(res.data))
         .catch((err) => console.error(err));
     }
@@ -28,19 +30,19 @@ const Vacuna = () => {
 
   useEffect(() => {
     if (mascota) {
-      axios.get(`http://localhost:3001/api/informes/informe/${mascota.id}`)
+      axios.get(`${API_URL}/api/informes/informe/${mascota.id}`)
         .then(res => {
           setInforme(res.data.informe || "");
           setAlergias(res.data.alergias || "");
         });
 
-      axios.get(`http://localhost:3001/api/informes/vacunas/${mascota.id}`)
+      axios.get(`${API_URL}/api/informes/vacunas/${mascota.id}`)
         .then(res => setVacunas(res.data || []));
     }
   }, [mascota]);
 
   const guardarInforme = () => {
-    axios.post(`http://localhost:3001/api/informes/informe`, {
+    axios.post(`${API_URL}/api/informes/informe`, {
       mascota_id: mascota.id,
       informe,
       alergias
@@ -57,7 +59,7 @@ const Vacuna = () => {
   const agregarVacuna = () => {
     const { nombre, fecha } = nuevaVacuna;
     if (!nombre || !fecha) return alert("Completa los campos");
-    axios.post(`http://localhost:3001/api/informes/vacunas`, {
+    axios.post(`${API_URL}/api/informes/vacunas`, {
       mascota_id: mascota.id,
       nombre,
       fecha
@@ -68,7 +70,7 @@ const Vacuna = () => {
   };
 
   const eliminarVacuna = (nombre) => {
-    axios.delete(`http://localhost:3001/api/informes/vacunas`, {
+    axios.delete(`${API_URL}/api/informes/vacunas`, {
       data: { mascota_id: mascota.id, nombre }
     }).then(() => {
       setVacunas(prev => prev.filter(v => v.nombre !== nombre));

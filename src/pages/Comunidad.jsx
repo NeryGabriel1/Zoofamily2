@@ -16,9 +16,11 @@ function Comunidad() {
   const { currentUser } = useAuth();
   const scrollRef = useRef(null);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const fetchMensajes = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/api/comunidad/mensajes');
+      const res = await axios.get(`${API_URL}/api/comunidad/mensajes`);
       const mensajesLimpios = res.data.map(msg => ({
         ...msg,
         imagenes: Array.isArray(msg.imagenes) ? msg.imagenes.flat() : []
@@ -53,7 +55,7 @@ function Comunidad() {
     });
 
     try {
-      await axios.post('http://localhost:3001/api/comunidad/mensaje', formData, {
+      await axios.post(`${API_URL}/api/comunidad/mensaje`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setNuevoMensaje('');
@@ -81,7 +83,7 @@ function Comunidad() {
     <div className="comunidad-page-container">
       <Navbar />
       <div className="comunidad-content">
-       <h2 className="notificaciones-titles">Comunidad</h2>
+        <h2 className="notificaciones-titles">Comunidad</h2>
 
         {mensajes.map((msg, index) => {
           const perfilUrl = msg.foto_perfil?.startsWith('http') ? msg.foto_perfil : defaultProfile;
@@ -119,7 +121,7 @@ function Comunidad() {
                   <div className="mensaje-imagenes">
                     {msg.imagenes.map((imgUrl, i) => {
                       if (typeof imgUrl !== 'string') return null;
-                      const url = `http://localhost:3001${imgUrl}`;
+                      const url = `${API_URL}${imgUrl}`;
                       const isPDF = imgUrl.toLowerCase().endsWith('.pdf');
 
                       return isPDF ? (
