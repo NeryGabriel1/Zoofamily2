@@ -16,17 +16,18 @@ const PerfilDeUsuario = () => {
     fechaRegistro: ""
   });
   const [mascotas, setMascotas] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
   useEffect(() => {
     const fetchDatos = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/usuarios/username/${username}`);
+        const res = await axios.get(`${API_URL}/api/usuarios/username/${username}`);
         setDatos(res.data);
 
-        const estadRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/mascotas/estadisticas/${res.data.id}`);
+        const estadRes = await axios.get(`${API_URL}/api/mascotas/estadisticas/${res.data.id}`);
         setEstadisticas(estadRes.data);
 
-        const mascotasRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/mascotas/${res.data.id}`);
+        const mascotasRes = await axios.get(`${API_URL}/api/mascotas/${res.data.id}`);
         setMascotas(mascotasRes.data);
       } catch (err) {
         console.error("Error al cargar perfil:", err);
@@ -48,7 +49,9 @@ const PerfilDeUsuario = () => {
   if (loading) return <p style={{ color: "white", textAlign: "center", marginTop: "100px" }}>Cargando perfil...</p>;
   if (!datos) return <p style={{ color: "white", textAlign: "center", marginTop: "100px" }}>Usuario no encontrado.</p>;
 
-  const foto = datos.foto_perfil || defaultProfile;
+  const foto = datos.foto_perfil?.startsWith('http')
+    ? datos.foto_perfil
+    : `${API_URL}${datos.foto_perfil || ''}`;
 
   return (
     <>
@@ -65,7 +68,12 @@ const PerfilDeUsuario = () => {
 
         <div className="profile-card">
           <div className="avatar-container">
-            <img className="perfil-foto" src={foto} alt="Foto de perfil" />
+            <img
+              className="perfil-foto"
+              src={foto || defaultProfile}
+              alt="Foto de perfil"
+              onError={(e) => { e.target.src = defaultProfile }}
+            />
             <div className="status-indicator"></div>
           </div>
 
@@ -91,26 +99,33 @@ const PerfilDeUsuario = () => {
             <div className="pets-section">
               <h3 className="pets-title">Mascotas de {datos.nombre}</h3>
               <div className="pets-grid">
-                {mascotas.map((m) => (
-                  <div key={m.id} className="pet-card">
-                    <div className="pet-avatar">🐾</div>
-                    <div className="pet-name">{m.nombre}</div>
-                    <div className="pet-type">{m.tipo}</div>
-                    {m.foto_url && (
-                      <img
-                        src={`${import.meta.env.VITE_API_URL}${m.foto_url}`}
-                        alt={m.nombre}
-                        style={{
-                          width: "200px",
-                          height: "200px",
-                          objectFit: "cover",
-                          borderRadius: "10px",
-                          marginTop: "5px"
-                        }}
-                      />
-                    )}
-                  </div>
-                ))}
+                {mascotas.map((m) => {
+                  const imgUrl = m.foto_url?.startsWith('http')
+                    ? m.foto_url
+                    : `${API_URL}${m.foto_url}`;
+
+                  return (
+                    <div key={m.id} className="pet-card">
+                      <div className="pet-avatar">🐾</div>
+                      <div className="pet-name">{m.nombre}</div>
+                      <div className="pet-type">{m.tipo}</div>
+                      {m.foto_url && (
+                        <img
+                          src={imgUrl}
+                          alt={m.nombre}
+                          style={{
+                            width: "200px",
+                            height: "200px",
+                            objectFit: "cover",
+                            borderRadius: "10px",
+                            marginTop: "5px"
+                          }}
+                          onError={(e) => { e.target.style.display = 'none' }}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

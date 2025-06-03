@@ -22,11 +22,16 @@ const Perfil = () => {
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
+  const getFotoUrl = (path) => {
+    if (!path) return defaultProfile;
+    return path.startsWith("http") ? path : `${API_URL}${path}`;
+  };
+
   useEffect(() => {
     if (userData) {
       setNombre(userData.nombre || "");
       setUsername(userData.username || "");
-      setFoto(userData.foto_perfil || defaultProfile);
+      setFoto(getFotoUrl(userData.foto_perfil));
       obtenerEstadisticas(userData.id);
     }
   }, [userData]);
@@ -82,12 +87,14 @@ const Perfil = () => {
       const res = await axios.put(`${API_URL}/api/usuarios/actualizar`, formData);
 
       if (res.data.success) {
+        const nuevaFoto = getFotoUrl(res.data.foto_perfil || userData.foto_perfil);
         setUserData(prev => ({
           ...prev,
           nombre,
           username,
-          foto_perfil: res.data.foto_perfil || prev.foto_perfil,
+          foto_perfil: nuevaFoto,
         }));
+        setFoto(nuevaFoto);
         alert("Perfil actualizado correctamente");
         setEditando(false);
       } else {
@@ -103,7 +110,6 @@ const Perfil = () => {
     <>
       <Navbar />
       <div className="perfil-page-container">
-        {/* Partículas animadas */}
         <div className="bg-particles">
           <div className="particle"></div>
           <div className="particle"></div>
@@ -112,12 +118,16 @@ const Perfil = () => {
           <div className="particle"></div>
         </div>
 
-        {/* Tarjeta de perfil */}
         <div className="profile-card">
           <div className="avatar-container">
             <input type="file" accept="image/*" onChange={handleImagen} id="fotoInput" hidden />
             <label htmlFor="fotoInput">
-              <img className="perfil-foto" src={foto} alt="Foto de perfil" />
+              <img
+                className="perfil-foto"
+                src={foto}
+                alt="Foto de perfil"
+                onError={(e) => { e.target.onerror = null; e.target.src = defaultProfile; }}
+              />
             </label>
             <div className="status-indicator"></div>
           </div>
@@ -145,7 +155,6 @@ const Perfil = () => {
             </>
           )}
 
-          {/* ESTADÍSTICAS */}
           <div className="stats-container">
             <div className="stat-item">
               <div className="stat-number">{estadisticas.totalMascotas}</div>
@@ -161,7 +170,6 @@ const Perfil = () => {
             </div>
           </div>
 
-          {/* BOTONES */}
           <div className="action-buttons">
             {editando ? (
               <button className="action-btn primary" onClick={handleGuardar}>Guardar</button>
