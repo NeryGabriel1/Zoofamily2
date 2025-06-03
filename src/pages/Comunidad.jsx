@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import Picker from 'emoji-picker-react';
 import defaultProfile from '../assets/default_profile.png';
+import { formatImageUrl } from '../utils/formatImageUrl';
 
 function Comunidad() {
   const [mensajes, setMensajes] = useState([]);
@@ -86,7 +87,7 @@ function Comunidad() {
         <h2 className="notificaciones-titles">Comunidad</h2>
 
         {mensajes.map((msg, index) => {
-          const perfilUrl = msg.foto_perfil?.startsWith('http') ? msg.foto_perfil : defaultProfile;
+          const perfilUrl = msg.foto_perfil ? formatImageUrl(msg.foto_perfil) : defaultProfile;
 
           return (
             <div key={msg.id || index} className="mensaje-card">
