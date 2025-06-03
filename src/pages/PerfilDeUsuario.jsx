@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import defaultProfile from "../assets/default_profile.png";
+import { formatImageUrl } from "../utils/formatImageUrl";
 import "./Perfil.css";
 
 const PerfilDeUsuario = () => {
@@ -70,7 +71,7 @@ const PerfilDeUsuario = () => {
           <div className="avatar-container">
             <img
               className="perfil-foto"
-              src={foto || defaultProfile}
+              src={foto ? formatImageUrl(foto) : defaultProfile}
               alt="Foto de perfil"
               onError={(e) => { e.target.src = defaultProfile }}
             />

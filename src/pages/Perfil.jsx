@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 import defaultProfile from '../assets/default_profile.png';
 import axios from "axios";
+import { formatImageUrl } from "../utils/formatImageUrl";
 
 const Perfil = () => {
   const { currentUser, userData, setUserData } = useAuth();
@@ -124,8 +125,7 @@ const Perfil = () => {
             <label htmlFor="fotoInput">
               <img
                 className="perfil-foto"
-                src={foto}
-                alt="Foto de perfil"
+                src={formatImageUrl(foto)}
                 onError={(e) => { e.target.onerror = null; e.target.src = defaultProfile; }}
               />
             </label>

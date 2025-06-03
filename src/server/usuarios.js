@@ -102,7 +102,7 @@ router.post('/verificar-codigo', (req, res) => {
     return res.status(400).json({ message: 'Código incorrecto' });
   }
 
-  delete codigosVerificacion[normalizedEmail]; // borra tras verificar
+  delete codigosVerificacion[normalizedEmail];
   return res.json({ message: 'Verificación exitosa' });
 });
 
@@ -120,7 +120,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-// Registrar usuario
+
+// REGISTRAR USUARIO
 router.post('/', async (req, res) => {
   try {
     const { uid, nombre, email, foto_perfil, proveedor, username, password } = req.body;
@@ -133,7 +134,6 @@ router.post('/', async (req, res) => {
     const safeNombre = nombre?.trim() || '';
     let safeUsername = username?.trim() || normalizedEmail.split('@')[0];
     const proveedorFinal = proveedor || 'email';
-    const fotoPerfilFinal = foto_perfil || 'https://miapp.com/default_profile.png';
 
     const [existingUser] = await db.query('SELECT id FROM usuarios WHERE uid = ? OR email = ?', [uid, normalizedEmail]);
     if (existingUser.length > 0) return res.status(200).json({ message: 'Usuario ya existe' });
@@ -149,6 +149,8 @@ router.post('/', async (req, res) => {
       hashedPassword = await bcrypt.hash(password, 10);
     }
 
+    const fotoPerfilFinal = foto_perfil || `${req.protocol}://${req.get('host')}/default_profile.png`;
+
     await db.query(
       `INSERT INTO usuarios (uid, nombre, email, foto_perfil, proveedor, username, password)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
@@ -162,13 +164,12 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Actualizar perfil
+// ACTUALIZAR PERFIL (con rutas dinámicas)
 router.put('/actualizar', upload.single('foto'), async (req, res) => {
   const { id, nombre, username } = req.body;
   const nuevaFoto = req.file;
 
   try {
-    // Verifica si el username está en uso por otro
     const [userExists] = await db.query(
       'SELECT id FROM usuarios WHERE username = ? AND id != ?',
       [username, id]
@@ -177,12 +178,12 @@ router.put('/actualizar', upload.single('foto'), async (req, res) => {
       return res.json({ success: false, message: 'El username ya está en uso' });
     }
 
-    // Obtener foto anterior
     const [userData] = await db.query('SELECT foto_perfil FROM usuarios WHERE id = ?', [id]);
     let nuevaURL = null;
 
     if (nuevaFoto) {
-      nuevaURL = `http://localhost:3001/uploads/perfiles/${nuevaFoto.filename}`;
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      nuevaURL = `${baseUrl}/uploads/perfiles/${nuevaFoto.filename}`;
     }
 
     const updateQuery = `
@@ -191,12 +192,11 @@ router.put('/actualizar', upload.single('foto'), async (req, res) => {
     const updateParams = nuevaURL ? [nombre, username, nuevaURL, id] : [nombre, username, id];
     await db.query(updateQuery, updateParams);
 
-    // Elimina la antigua foto si era local
     if (
       nuevaFoto &&
       userData.length &&
       userData[0].foto_perfil &&
-      userData[0].foto_perfil.startsWith('http://localhost:3001/uploads/perfiles/')
+      userData[0].foto_perfil.includes('/uploads/perfiles/')
     ) {
       const oldPath = path.join(__dirname, '..', 'uploads', 'perfiles', path.basename(userData[0].foto_perfil));
       if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
@@ -209,7 +209,7 @@ router.put('/actualizar', upload.single('foto'), async (req, res) => {
   }
 });
 
-// Obtener por UID
+// OBTENER POR UID
 router.get('/uid/:uid', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM usuarios WHERE uid = ?', [req.params.uid]);
@@ -221,7 +221,7 @@ router.get('/uid/:uid', async (req, res) => {
   }
 });
 
-// Obtener por username
+// OBTENER POR USERNAME
 router.get('/username/:username', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM usuarios WHERE username = ?', [req.params.username]);
